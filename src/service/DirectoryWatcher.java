@@ -32,8 +32,10 @@ import java.util.Map;
  * @since Version 0.9
  */
 public class DirectoryWatcher {
+	private final Path path;
 	private final WatchService watcher;
 	private final Map<WatchKey,Path> keys;
+	private PathSnapshot pathSnapshot;
     private boolean trace = false;
 	
     @SuppressWarnings("unchecked")
@@ -62,6 +64,9 @@ public class DirectoryWatcher {
 	public DirectoryWatcher(Path dir) throws IOException {
         this.watcher = FileSystems.getDefault().newWatchService();
         this.keys = new HashMap<WatchKey,Path>();
+        this.path = dir;
+        this.pathSnapshot = new PathSnapshot(dir);
+        
         register(dir);
         // enable trace after initial registration
         this.trace = true;
@@ -99,13 +104,14 @@ public class DirectoryWatcher {
                 WatchEvent<Path> ev = cast(event);
                 Path name = ev.context();
                 Path child = dir.resolve(name);
-                
+                this.updateDirContent();
                 /*
                  * currently: creating file events are neglected 
                  * but deleting a file creates an event which is printed
                  * TODO: disregard delete event if sent from file
                  */
-                if (Files.isRegularFile(child)) {
+                boolean isFile = Files.isRegularFile(child);
+                if (pathSnapshot.isInFileCache(child)|| isFile) {
                 	//disregard the event if file
                 	event = null;
 				} else {
@@ -125,4 +131,9 @@ public class DirectoryWatcher {
             }
         }
     }
+
+	private void updateDirContent() {
+		this.pathSnapshot = pathSnapshot.updateSnapshot(path);
+		
+	}
 }
