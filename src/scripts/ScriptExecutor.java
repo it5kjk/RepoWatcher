@@ -34,7 +34,6 @@ public class ScriptExecutor {
 	    }
 	}
 	
-	
 	// write a temporary script file to run
 	public File createTempScript() throws IOException {
 	    File tempScript = File.createTempFile("script", null);
