@@ -96,22 +96,17 @@ public class DirectoryWatcher {
                 Kind<?> kind = event.kind();
 
                 // TBD - provide example of how OVERFLOW event is handled
-                if (kind == OVERFLOW) {
-                    continue;
-                }
+                if (kind == OVERFLOW) 
+                    continue;             
                 
                 // Context for directory entry event is the file name of entry
                 WatchEvent<Path> ev = cast(event);
                 Path name = ev.context();
                 Path child = dir.resolve(name);
-                this.updateDirContent();
-                /*
-                 * currently: creating file events are neglected 
-                 * but deleting a file creates an event which is printed
-                 * TODO: disregard delete event if sent from file
-                 */
+
                 boolean isFile = Files.isRegularFile(child);
-                if (pathSnapshot.isInFileCache(child)|| isFile) {
+                this.updateDirContent();
+                if (pathSnapshot.isInFileCache(child)|| isFile) { 
                 	//disregard the event if file
                 	event = null;
 				} else {

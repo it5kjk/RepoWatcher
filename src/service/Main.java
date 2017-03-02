@@ -44,12 +44,12 @@ import java.nio.file.Paths;
   * Launch the application.
   * 
   * @author JNK
-  * @version 0.9
+  * @version 1.0
   */
 public class Main {
 	public static void main(String[] args) {
 		try {
-			new DirectoryWatcher(Paths.get("C:\\temp")).processEvents();
+			new DirectoryWatcher(Paths.get("C:\\Temp")).processEvents();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
