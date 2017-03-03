@@ -31,8 +31,8 @@
 
 package service;
 
-import java.io.IOException;
 import java.nio.file.Paths;
+import scripts.ScriptExecutor;
 
 /*
  * This project uses aforementioned source code provided by Oracle
@@ -50,7 +50,9 @@ public class Main {
 	public static void main(String[] args) {
 		try {
 			new DirectoryWatcher(Paths.get("C:\\Temp")).processEvents();
-		} catch (IOException e) {
+			new ScriptExecutor(Paths.get("C:\\Temp\\test"));
+			
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -2,6 +2,8 @@ package scripts;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -13,18 +15,19 @@ public class ScriptExecutor {
 	Process process;
 	
 	public ScriptExecutor(Path dir) {
-		//TODO: implement constructor
-		/*
-		 * pass directory where script is run
-		 * run bash with shell script
-		 */
+
+		List<String> command = new ArrayList<String>();
 		
 		try {
-	    	pb = new ProcessBuilder(
-    			"cmd",
-    			//open command line to run bash to run script
-    			"\"C:\\Git\\bin\\sh.exe\" --login -i --cd=\""+dir+"\" -- hw.sh"
-			);
+			command.add("\"C:\\Program Files\\Git\\bin\\sh.exe\"");
+			command.add("--cd=" + "\""+ dir + "\"");
+			command.add("-c");
+			//TODO: fix second script not running
+//			command.add("chmod +x gitinit.sh && ./gitinit.sh");
+			//TODO adjust second script to windows
+			command.add("chmod +x gitc.sh && ./gitc.sh");
+				
+	    	pb = new ProcessBuilder(command);
 	        pb.inheritIO();
 	        process = pb.start();
 	        process.waitFor();
