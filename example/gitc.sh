@@ -31,19 +31,17 @@ echo "Will create a new *$PRIVACYWORD* repo named $REPONAME"
 echo "on github.com in user account $USERNAME, with this description:"
 echo $DESCRIPTION
 
-#echo "Type 'y' to proceed, any other character to cancel."
-#read OK
-#if [ "$OK" != "y" ]; then
-#  echo "User cancelled"
-#  exit
-#fi
+echo "Type 'y' to proceed, any other character to cancel."
+read OK
+if [ "$OK" != "y" ]; then
+  echo "User cancelled"
+  exit
+fi
 
 # Curl some json to the github API oh damn we so fancy
 /usr/bin/curl.exe -u $USERNAME https://api.github.com/user/repos -d '{\"name\": \"$REPONAME \"description\": \"$DESCRIPTION\", \"private\": false, \"has_issues\": true, \"has_downloads\": true, \"has_wiki\": false}'
  
 # Set the freshly created repo to the origin and push
 # You'll need to have added your public key to your github account
-#git remote add origin https://github.com/$USERNAME/$REPONAME.git
-#git add .
-#git commit -F cm.txt
-#git push -u origin master
+git remote add origin https://github.com/$USERNAME/$REPONAME.git
+git push -u origin master

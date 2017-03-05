@@ -8,32 +8,31 @@ import java.util.List;
 /**
  * 
  * @author JNK
- *
+ * @since 1.0.1a
  */
-public class ScriptExecutor {
-	ProcessBuilder pb;
-	Process process;
+public class ScriptProcessor {
+	private ProcessBuilder pb;
+	private Process process;
+	public static String[] scriptSequence = {
+		"gitinit.sh", 
+		"gitc.sh"
+	}; 
 	
-	public ScriptExecutor(Path dir) {
-
-		List<String> command = new ArrayList<String>();
+	public ScriptProcessor(Path dir, String script) {
+		List<String> commands = new ArrayList<String>();
 		
 		try {
-			command.add("\"C:\\Program Files\\Git\\bin\\sh.exe\"");
-			command.add("--cd=" + "\""+ dir + "\"");
-			command.add("-c");
-			//TODO: fix second script not running
-//			command.add("chmod +x gitinit.sh && ./gitinit.sh");
-			//TODO adjust second script to windows
-			command.add("chmod +x gitc.sh && ./gitc.sh");
+			commands.add("\"C:\\Program Files\\Git\\bin\\sh.exe\"");
+			commands.add("--cd=" + "\""+ dir + "\"");
+			commands.add("-c");
+			commands.add("chmod +x " + script+ " && ./" + script);
 				
-	    	pb = new ProcessBuilder(command);
+	    	pb = new ProcessBuilder(commands);
 	        pb.inheritIO();
 	        process = pb.start();
 	        process.waitFor();
 	    } catch (InterruptedException | IOException e) {
 			e.printStackTrace();
-		} finally {
 	    }
 	}
 	
@@ -70,6 +69,15 @@ public class ScriptExecutor {
 	    }
 	}
 
+	public static void executeSequence(Path dir) {
+		for (String script : scriptSequence) {
+			new ScriptProcessor(dir, script);
+		}
+	}
+	
+	private static void provideScriptFiles(Path dir) {
+		//TODO: copy *.sh files from a dedicated location to current dir
+	}
 }
 
 

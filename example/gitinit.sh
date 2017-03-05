@@ -12,3 +12,7 @@ printf "*.sh\r\n" >> .gitignore
 
 printf "Initialize empty repository\r\n" >> cm.txt
 printf "\r\nAdd gitignore" >> cm.txt
+
+#set up first commit
+git add .
+git commit -F cm.txt

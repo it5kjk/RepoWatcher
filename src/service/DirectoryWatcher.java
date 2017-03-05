@@ -10,12 +10,15 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchEvent.Kind;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.HashMap;
 import java.util.Map;
+
+import scripts.ScriptProcessor;
 
 /**
  * Slightly modified version of Oracle
@@ -109,9 +112,13 @@ public class DirectoryWatcher {
                 if (pathSnapshot.isInFileCache(child)|| isFile) { 
                 	//disregard the event if file
                 	event = null;
-				} else {
+				} else if (child.toString().contains("New")){
 					// print out event
 					System.out.format("%s: %s\n", event.kind().name(), child);
+				} else {
+					System.out.format("%s: %s\n", event.kind().name(), child);
+					ScriptProcessor.executeSequence(Paths.get(
+												child.toString()));
 				}
             }
             

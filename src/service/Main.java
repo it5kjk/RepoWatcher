@@ -32,7 +32,7 @@
 package service;
 
 import java.nio.file.Paths;
-import scripts.ScriptExecutor;
+import scripts.ScriptProcessor;
 
 /*
  * This project uses aforementioned source code provided by Oracle
@@ -44,14 +44,13 @@ import scripts.ScriptExecutor;
   * Launch the application.
   * 
   * @author JNK
-  * @version 1.0
+  * @version 1.0.1a
   */
 public class Main {
 	public static void main(String[] args) {
 		try {
-			new DirectoryWatcher(Paths.get("C:\\Temp")).processEvents();
-			new ScriptExecutor(Paths.get("C:\\Temp\\test"));
-			
+			new DirectoryWatcher(Paths.get("C:\\Temp\\test")).processEvents();
+//			ScriptExecutor.executeSequence(Paths.get("C:\\Temp\\test"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
