@@ -1,8 +1,12 @@
 package scripts;
 
 import java.io.*;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -11,12 +15,14 @@ import java.util.List;
  * @since 1.0.1a
  */
 public class ScriptProcessor {
+	private static final Path SCRIPT_LOCATION = Paths.get("C:\\scripts\\RW");
 	private ProcessBuilder pb;
 	private Process process;
-	public static String[] scriptSequence = {
-		"gitinit.sh", 
-		"gitc.sh"
-	}; 
+	public static ArrayList<String>scriptSequence = new ArrayList<String>(
+														Arrays.asList(
+															"gitinit.sh", 
+															"gitc.sh")
+	); 
 	
 	public ScriptProcessor(Path dir, String script) {
 		List<String> commands = new ArrayList<String>();
@@ -70,13 +76,38 @@ public class ScriptProcessor {
 	}
 
 	public static void executeSequence(Path dir) {
-		for (String script : scriptSequence) {
-			new ScriptProcessor(dir, script);
+		if (scriptSequence != null) {
+			for (String script : scriptSequence) {
+				new ScriptProcessor(dir, script);
+			}
+		} else {
+			collectScriptFiles(SCRIPT_LOCATION);
+			executeSequence(dir);
 		}
 	}
 	
-	private static void provideScriptFiles(Path dir) {
-		//TODO: copy *.sh files from a dedicated location to current dir
+	/*
+	 * Copy shell script files from a given location to the current directory
+	 */
+	private static void collectScriptFiles(Path location) {
+		//TODO: test this
+		File[] files = location.toFile().listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.toLowerCase().endsWith(".sh");
+			}
+		});
+		for (File file : files) {
+			try {
+				Files.copy(
+						file.toPath(), 
+						Paths.get("./"),
+						StandardCopyOption.COPY_ATTRIBUTES);
+				scriptSequence.add(file.getName());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
 
