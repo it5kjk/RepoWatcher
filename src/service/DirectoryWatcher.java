@@ -117,8 +117,10 @@ public class DirectoryWatcher {
 					System.out.format("%s: %s\n", event.kind().name(), child);
 				} else {
 					System.out.format("%s: %s\n", event.kind().name(), child);
-					ScriptProcessor.executeSequence(Paths.get(
-												child.toString()));
+					if (kind == ENTRY_CREATE) {
+						ScriptProcessor.executeSequence(Paths.get(
+													child.toString()));
+					}
 				}
             }
             

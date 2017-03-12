@@ -9,19 +9,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import sun.net.www.content.text.plain;
+
 /**
  * 
  * @author JNK
  * @since 1.0.1a
  */
 public class ScriptProcessor {
-	private static final Path SCRIPT_LOCATION = Paths.get("C:\\scripts\\RW");
+	private static final Path scriptPath = Paths.get("C:\\Temp\\scripts");
 	private ProcessBuilder pb;
 	private Process process;
-	public static ArrayList<String>scriptSequence = new ArrayList<String>(
-														Arrays.asList(
-															"gitinit.sh", 
-															"gitc.sh")
+	public static ArrayList<String>scriptSequence 
+				= new ArrayList<String>(Arrays.asList(
+//										"gitinit.sh", 
+//										"gitc.sh"
+										)
 	); 
 	
 	public ScriptProcessor(Path dir, String script) {
@@ -76,21 +79,20 @@ public class ScriptProcessor {
 	}
 
 	public static void executeSequence(Path dir) {
-		if (scriptSequence != null) {
+		if (scriptSequence != null && !scriptSequence.isEmpty()) {
 			for (String script : scriptSequence) {
 				new ScriptProcessor(dir, script);
 			}
 		} else {
-			collectScriptFiles(SCRIPT_LOCATION);
+			collectScriptFiles(scriptPath, dir);
 			executeSequence(dir);
 		}
 	}
 	
 	/*
-	 * Copy shell script files from a given location to the current directory
+	 * Copy shell script files to target location
 	 */
-	private static void collectScriptFiles(Path location) {
-		//TODO: test this
+	private static void collectScriptFiles(Path location, Path target) {
 		File[] files = location.toFile().listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
@@ -99,10 +101,11 @@ public class ScriptProcessor {
 		});
 		for (File file : files) {
 			try {
+				String dest = target.toString() + "\\";
 				Files.copy(
 						file.toPath(), 
-						Paths.get("./"),
-						StandardCopyOption.COPY_ATTRIBUTES);
+						(new File(dest + file.getName())).toPath(),
+						StandardCopyOption.REPLACE_EXISTING);
 				scriptSequence.add(file.getName());
 			} catch (IOException e) {
 				e.printStackTrace();
