@@ -22,8 +22,8 @@ public class ScriptProcessor {
 	private Process process;
 	public static ArrayList<String>scriptSequence 
 				= new ArrayList<String>(Arrays.asList(
-//										"gitinit.sh", 
-//										"gitc.sh"
+										"gitinit.sh", 
+										"gitc.sh"
 										)
 	); 
 	
@@ -44,7 +44,7 @@ public class ScriptProcessor {
 			e.printStackTrace();
 	    }
 	}
-	
+
 	// write a temporary script file to run
 	public File createTempScript() throws IOException {
 	    File tempScript = File.createTempFile("script", null);
@@ -80,9 +80,11 @@ public class ScriptProcessor {
 
 	public static void executeSequence(Path dir) {
 		if (scriptSequence != null && !scriptSequence.isEmpty()) {
+			collectScriptFiles(scriptPath, dir); //test
 			for (String script : scriptSequence) {
 				new ScriptProcessor(dir, script);
 			}
+			deleteScriptFiles(dir);
 		} else {
 			collectScriptFiles(scriptPath, dir);
 			executeSequence(dir);
@@ -106,13 +108,19 @@ public class ScriptProcessor {
 						file.toPath(), 
 						(new File(dest + file.getName())).toPath(),
 						StandardCopyOption.REPLACE_EXISTING);
-				scriptSequence.add(file.getName());
+//				scriptSequence.add(file.getName());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
+
+	// clean up directory
+	private static void deleteScriptFiles(Path dir) {
+		// TODO implement function
+		for (String script : scriptSequence) {
+			File scriptFile = new File(dir.toString() + "\\" + script);
+			scriptFile.delete();
+		}
+	}
 }
-
-
-
