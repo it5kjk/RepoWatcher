@@ -112,7 +112,8 @@ public class DirectoryWatcher {
                 if (pathSnapshot.isInFileCache(child)|| isFile) { 
                 	//disregard the event if file
                 	event = null;
-				} else if (child.toString().contains("New")){
+				} else if (child.toString().contains("New")
+						|| child.toString().contains("Neuer Ordner")){
 					// print out event
 					System.out.format("%s: %s\n", event.kind().name(), child);
 				} else {

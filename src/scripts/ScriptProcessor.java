@@ -31,7 +31,12 @@ public class ScriptProcessor {
 		List<String> commands = new ArrayList<String>();
 		
 		try {
-			commands.add("\"C:\\Program Files\\Git\\bin\\sh.exe\"");
+//			 commands.add("cmd");
+			if (new File("C:\\Program Files\\Git\\bin\\sh.exe\\").exists()) {
+				commands.add("\"C:\\Program Files\\Git\\bin\\sh.exe\"");
+			} else if (new File("D:\\Programme\\Git\\bin\\sh.exe\\").exists()) {
+				commands.add("\"D:\\Programme\\Git\\bin\\sh.exe\"");
+			}
 			commands.add("--cd=" + "\""+ dir + "\"");
 			commands.add("-c");
 			commands.add("chmod +x " + script+ " && ./" + script);
